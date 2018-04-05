@@ -109,7 +109,7 @@ start <- proc.time() # Start clock
 #                      MoreArgs=list(chainLength=300, no.param.par.var=2, with.storage=T, model.comparison=F, model.optimization=F))
 
 result <- clusterMap(cluster, CBM.wtc3, treat.group=c(list(list(1,2))),
-                     MoreArgs=list(chainLength=300, no.param.par.var=3, with.storage=T, model.comparison=F, model.optimization=F))
+                     MoreArgs=list(chainLength=300, no.param.par.var=2, with.storage=T, model.comparison=F, model.optimization=F))
 
 time_elapsed_series <- proc.time() - start # End clock
 stopCluster(cluster)

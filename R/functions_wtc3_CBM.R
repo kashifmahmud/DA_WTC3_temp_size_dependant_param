@@ -919,7 +919,9 @@ model <- function (no.param,data.set,tnc.partitioning,Y,k,af,as,sf,sr) {
     k.i = k[1]; Y.i = Y[1]; af.i = af[1]; as.i = as[1]; sf.i = sf[1]; sr.i = sr[1]
   }
   for (i in 2:nrow(data.set)) {
-  #   if (no.param == 2) {
+    # #-----------------------------------------------------------------------------------------
+    # # Option 1: Parameter vary with time
+    #   if (no.param == 2) {
   #     k.i = k[1] + k[2]*i; Y.i = Y[1]+ Y[2]*i; af.i = af[1]+ af[2]*i; as.i = as[1]+ as[2]*i; sf.i = sf[1]+ sf[2]*i; sr.i = sr[1]+ sr[2]*i
   #   }
   #   if (no.param == 3) {
@@ -934,23 +936,66 @@ model <- function (no.param,data.set,tnc.partitioning,Y,k,af,as,sf,sr) {
     #   k.i = k[1]*data.all$Tair[i]; Y.i = Y[1]*data.all$Tair[i]; af.i = af[1]*data.all$Tair[i]; 
     #   as.i = as[1]*data.all$Tair[i]; sf.i = sf[1]*data.all$Tair[i]; sr.i = sr[1]*data.all$Tair[i]
     # }
+    
+    # #-----------------------------------------------------------------------------------------
+    # # Option 2: Parameter vary with temperature (previous week mean temperature)
+    # if (no.param == 2) {
+    #   k.i = k[1] + k[2]*data.all$Tair[i]; Y.i = Y[1]+ Y[2]*data.all$Tair[i]; af.i = af[1]+ af[2]*data.all$Tair[i];
+    #   as.i = as[1]+ as[2]*data.all$Tair[i]; sf.i = sf[1]+ sf[2]*data.all$Tair[i]; sr.i = sr[1]+ sr[2]*data.all$Tair[i]
+    # }
+    # if (no.param == 3) {
+    #   k.i = k[1] + k[2]*data.all$Tair[i] + k[3]*data.all$Tair[i]*data.all$Tair[i]; Y.i = Y[1]+ Y[2]*data.all$Tair[i] + Y[3]*data.all$Tair[i]*data.all$Tair[i];
+    #   af.i = af[1]+ af[2]*data.all$Tair[i] + af[3]*data.all$Tair[i]*data.all$Tair[i]; as.i = as[1]+ as[2]*data.all$Tair[i] + as[3]*data.all$Tair[i]*data.all$Tair[i];
+    #   sf.i = sf[1]+ sf[2]*data.all$Tair[i] + sf[3]*data.all$Tair[i]*data.all$Tair[i]; sr.i = sr[1]+ sr[2]*data.all$Tair[i] + sr[3]*data.all$Tair[i]*data.all$Tair[i]
+    # }
+    # if (no.param == 4) {
+    #   k.i = k[1] + k[2]*data.all$Tair[i] + k[3]*data.all$Tair[i]*data.all$Tair[i] + k[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
+    #   Y.i = Y[1]+ Y[2]*data.all$Tair[i] + Y[3]*data.all$Tair[i]*data.all$Tair[i] + Y[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
+    #   af.i = af[1]+ af[2]*data.all$Tair[i] + af[3]*data.all$Tair[i]*data.all$Tair[i] + af[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
+    #   as.i = as[1]+ as[2]*data.all$Tair[i] + as[3]*data.all$Tair[i]*data.all$Tair[i] + as[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
+    #   sf.i = sf[1]+ sf[2]*data.all$Tair[i] + sf[3]*data.all$Tair[i]*data.all$Tair[i] + sf[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
+    #   sr.i = sr[1]+ sr[2]*data.all$Tair[i] + sr[3]*data.all$Tair[i]*data.all$Tair[i] + sr[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i]
+    # }
+    
+    #-----------------------------------------------------------------------------------------
+    # Option 3: Parameter vary with plant size
     if (no.param == 2) {
-      k.i = k[1] + k[2]*data.all$Tair[i]; Y.i = Y[1]+ Y[2]*data.all$Tair[i]; af.i = af[1]+ af[2]*data.all$Tair[i];
-      as.i = as[1]+ as[2]*data.all$Tair[i]; sf.i = sf[1]+ sf[2]*data.all$Tair[i]; sr.i = sr[1]+ sr[2]*data.all$Tair[i]
+      k.i = k[1] + k[2]*data.all$height[i]; Y.i = Y[1]+ Y[2]*data.all$height[i]; af.i = af[1]+ af[2]*data.all$height[i];
+      as.i = as[1]+ as[2]*data.all$height[i]; sf.i = sf[1]+ sf[2]*data.all$height[i]; sr.i = sr[1]+ sr[2]*data.all$height[i]
     }
     if (no.param == 3) {
-      k.i = k[1] + k[2]*data.all$Tair[i] + k[3]*data.all$Tair[i]*data.all$Tair[i]; Y.i = Y[1]+ Y[2]*data.all$Tair[i] + Y[3]*data.all$Tair[i]*data.all$Tair[i];
-      af.i = af[1]+ af[2]*data.all$Tair[i] + af[3]*data.all$Tair[i]*data.all$Tair[i]; as.i = as[1]+ as[2]*data.all$Tair[i] + as[3]*data.all$Tair[i]*data.all$Tair[i];
-      sf.i = sf[1]+ sf[2]*data.all$Tair[i] + sf[3]*data.all$Tair[i]*data.all$Tair[i]; sr.i = sr[1]+ sr[2]*data.all$Tair[i] + sr[3]*data.all$Tair[i]*data.all$Tair[i]
+      k.i = k[1] + k[2]*data.all$height[i] + k[3]*data.all$height[i]*data.all$height[i]; Y.i = Y[1]+ Y[2]*data.all$height[i] + Y[3]*data.all$height[i]*data.all$height[i];
+      af.i = af[1]+ af[2]*data.all$height[i] + af[3]*data.all$height[i]*data.all$height[i]; as.i = as[1]+ as[2]*data.all$height[i] + as[3]*data.all$height[i]*data.all$height[i];
+      sf.i = sf[1]+ sf[2]*data.all$height[i] + sf[3]*data.all$height[i]*data.all$height[i]; sr.i = sr[1]+ sr[2]*data.all$height[i] + sr[3]*data.all$height[i]*data.all$height[i]
     }
     if (no.param == 4) {
-      k.i = k[1] + k[2]*data.all$Tair[i] + k[3]*data.all$Tair[i]*data.all$Tair[i] + k[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
-      Y.i = Y[1]+ Y[2]*data.all$Tair[i] + Y[3]*data.all$Tair[i]*data.all$Tair[i] + Y[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
-      af.i = af[1]+ af[2]*data.all$Tair[i] + af[3]*data.all$Tair[i]*data.all$Tair[i] + af[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
-      as.i = as[1]+ as[2]*data.all$Tair[i] + as[3]*data.all$Tair[i]*data.all$Tair[i] + as[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
-      sf.i = sf[1]+ sf[2]*data.all$Tair[i] + sf[3]*data.all$Tair[i]*data.all$Tair[i] + sf[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i];
-      sr.i = sr[1]+ sr[2]*data.all$Tair[i] + sr[3]*data.all$Tair[i]*data.all$Tair[i] + sr[4]*data.all$Tair[i]*data.all$Tair[i]*data.all$Tair[i]
+      k.i = k[1] + k[2]*data.all$height[i] + k[3]*data.all$height[i]*data.all$height[i] + k[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      Y.i = Y[1]+ Y[2]*data.all$height[i] + Y[3]*data.all$height[i]*data.all$height[i] + Y[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      af.i = af[1]+ af[2]*data.all$height[i] + af[3]*data.all$height[i]*data.all$height[i] + af[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      as.i = as[1]+ as[2]*data.all$height[i] + as[3]*data.all$height[i]*data.all$height[i] + as[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      sf.i = sf[1]+ sf[2]*data.all$height[i] + sf[3]*data.all$height[i]*data.all$height[i] + sf[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      sr.i = sr[1]+ sr[2]*data.all$height[i] + sr[3]*data.all$height[i]*data.all$height[i] + sr[4]*data.all$height[i]*data.all$height[i]*data.all$height[i]
     }
+    #-----------------------------------------------------------------------------------------
+    # Option 4: Parameter vary with plant size (both height and diameter)
+    if (no.param == 2) {
+      k.i = k[1] + k[2]*(data.all$height[i]*data.all$diameter[i])^0.5; Y.i = Y[1]+ Y[2]*(data.all$height[i]*data.all$diameter[i])^0.5; af.i = af[1]+ af[2]*(data.all$height[i]*data.all$diameter[i])^0.5;
+      as.i = as[1]+ as[2]*(data.all$height[i]*data.all$diameter[i])^0.5; sf.i = sf[1]+ sf[2]*(data.all$height[i]*data.all$diameter[i])^0.5; sr.i = sr[1]+ sr[2]*(data.all$height[i]*data.all$diameter[i])^0.5
+    }
+    if (no.param == 3) {
+      k.i = k[1] + k[2]*data.all$height[i] + k[3]*data.all$height[i]*data.all$height[i]; Y.i = Y[1]+ Y[2]*data.all$height[i] + Y[3]*data.all$height[i]*data.all$height[i];
+      af.i = af[1]+ af[2]*data.all$height[i] + af[3]*data.all$height[i]*data.all$height[i]; as.i = as[1]+ as[2]*data.all$height[i] + as[3]*data.all$height[i]*data.all$height[i];
+      sf.i = sf[1]+ sf[2]*data.all$height[i] + sf[3]*data.all$height[i]*data.all$height[i]; sr.i = sr[1]+ sr[2]*data.all$height[i] + sr[3]*data.all$height[i]*data.all$height[i]
+    }
+    if (no.param == 4) {
+      k.i = k[1] + k[2]*data.all$height[i] + k[3]*data.all$height[i]*data.all$height[i] + k[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      Y.i = Y[1]+ Y[2]*data.all$height[i] + Y[3]*data.all$height[i]*data.all$height[i] + Y[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      af.i = af[1]+ af[2]*data.all$height[i] + af[3]*data.all$height[i]*data.all$height[i] + af[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      as.i = as[1]+ as[2]*data.all$height[i] + as[3]*data.all$height[i]*data.all$height[i] + as[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      sf.i = sf[1]+ sf[2]*data.all$height[i] + sf[3]*data.all$height[i]*data.all$height[i] + sf[4]*data.all$height[i]*data.all$height[i]*data.all$height[i];
+      sr.i = sr[1]+ sr[2]*data.all$height[i] + sr[3]*data.all$height[i]*data.all$height[i] + sr[4]*data.all$height[i]*data.all$height[i]*data.all$height[i]
+    }
+    #-----------------------------------------------------------------------------------------
     
     Rm[i] = data.set$Rd.foliage.mean[i-1]*Mleaf[i-1] + data.set$Rd.stem.mean[i-1]*Mwood[i-1]*data.set$SMratio[i-1] + 
       data.set$Rd.branch.mean[i-1]*Mwood[i-1]*data.set$BMratio[i-1] + 

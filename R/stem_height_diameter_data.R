@@ -60,5 +60,19 @@ height.dia$T_treatment = as.factor(height.dia$T_treatment)
 height.dia.final <- summaryBy(height+diameter ~ Date+T_treatment, data=height.dia, FUN=c(mean,standard.error))
 names(height.dia.final)[3:6] = c("height", "diameter", "height_SE", "diameter_SE")
 
+height.dia.final.amb = subset(height.dia.final, T_treatment %in% as.factor("ambient"))
+Dates = data.frame(Date=seq(as.Date("2013-09-17"), as.Date("2014-05-27"), by="days"))
+height.dia.final.amb = merge(height.dia.final.amb, Dates, by="Date", all=TRUE)
+height.dia.final.amb[,2] = height.dia.final.amb[1,2]
+height.dia.final.amb[,c(3:6)] = na.spline(height.dia.final.amb[,c(3:6)])
+
+height.dia.final.ele = subset(height.dia.final, T_treatment %in% as.factor("elevated"))
+height.dia.final.ele = merge(height.dia.final.ele, Dates, by="Date", all=TRUE)
+height.dia.final.ele[,2] = height.dia.final.ele[1,2]
+height.dia.final.ele[,c(3:6)] = na.spline(height.dia.final.ele[,c(3:6)])
+
+height.dia.final.tot = rbind(height.dia.final.amb, height.dia.final.ele)
+data = merge(data, height.dia.final.tot, by=c("Date","T_treatment"), all=FALSE)
+
 #----------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------
